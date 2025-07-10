@@ -63,9 +63,9 @@ $page_title = "Login";
 require_once 'templates/header.php';
 ?>
 
-<div class="form-container">
+<div class="animate-fade max-w-md mx-auto my-10 p-6 bg-white rounded shadow">
     <form method="POST" action="login.php<?php echo isset($_GET['redirect']) ? '?redirect=' . htmlspecialchars($_GET['redirect']) : ''; ?>">
-        <h1><i class="fas fa-sign-in-alt"></i> Login</h1>
+        <h1 class="text-2xl font-semibold mb-4 flex items-center space-x-2"><i class="fas fa-sign-in-alt"></i><span>Login</span></h1>
 
         <?php if (!empty($error_message)): ?>
             <div class="alert alert-danger">
@@ -73,20 +73,20 @@ require_once 'templates/header.php';
             </div>
         <?php endif; ?>
 
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" class="form-control" required>
+        <div class="mb-4">
+            <label for="username" class="block mb-1">Username</label>
+            <input type="text" id="username" name="username" class="w-full px-3 py-2 border rounded" required>
         </div>
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" class="form-control" required>
+        <div class="mb-4">
+            <label for="password" class="block mb-1">Password</label>
+            <input type="password" id="password" name="password" class="w-full px-3 py-2 border rounded" required>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">Login</button>
 
-        <p class="form-footer-text">
-            Don't have an account? <a href="register.php">Register here</a>
+        <p class="text-center text-sm mt-4">
+            Don't have an account? <a class="text-blue-600 hover:underline" href="register.php">Register here</a>
         </p>
     </form>
 </div>
