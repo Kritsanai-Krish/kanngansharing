@@ -47,8 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         $password_hash = password_hash($input['password'], PASSWORD_DEFAULT);
         
-        $sql = "INSERT INTO users (username, email, password_hash, full_name, phone_number, role, status) 
-                VALUES (?, ?, ?, ?, ?, 'member', 'pending')";
+        $sql = "INSERT INTO users (username, email, password_hash, full_name, phone_number, role, status)
+                VALUES (?, ?, ?, ?, ?, 'member', 'active')";
         
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -60,10 +60,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         $new_user_id = $pdo->lastInsertId();
-        create_log_entry($new_user_id, 'REGISTER', 'New user registered and is pending approval.');
-        
-        // Redirect to login page with a success message
-        redirect('login.php?registration=success');
+        create_log_entry($new_user_id, 'REGISTER', 'New user registered.');
+
+        // Auto login after successful registration
+        $_SESSION['user_id'] = $new_user_id;
+        $_SESSION['username'] = $input['username'];
+        $_SESSION['role'] = 'member';
+
+        redirect('profile.php');
     }
 }
 
@@ -71,9 +75,9 @@ $page_title = "Register";
 require_once 'templates/header.php';
 ?>
 
-<div class="form-container">
+<div class="animate-fade max-w-md mx-auto my-10 p-6 bg-white rounded shadow">
     <form method="POST" action="register.php">
-        <h1><i class="fas fa-user-plus"></i> Create Account</h1>
+        <h1 class="text-2xl font-semibold mb-4 flex items-center space-x-2"><i class="fas fa-user-plus"></i><span>Create Account</span></h1>
 
         <?php if (!empty($errors)): ?>
             <div class="alert alert-danger">
@@ -85,58 +89,46 @@ require_once 'templates/header.php';
             </div>
         <?php endif; ?>
 
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" class="form-control" value="<?php echo htmlspecialchars($input['username'] ?? ''); ?>" required>
+        <div class="mb-4">
+            <label for="username" class="block mb-1">Username</label>
+            <input type="text" id="username" name="username" class="w-full px-3 py-2 border rounded" value="<?php echo htmlspecialchars($input['username'] ?? ''); ?>" required>
         </div>
 
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" class="form-control" value="<?php echo htmlspecialchars($input['email'] ?? ''); ?>" required>
+        <div class="mb-4">
+            <label for="email" class="block mb-1">Email Address</label>
+            <input type="email" id="email" name="email" class="w-full px-3 py-2 border rounded" value="<?php echo htmlspecialchars($input['email'] ?? ''); ?>" required>
         </div>
         
-        <div class="form-group">
-            <label for="full_name">Full Name (ชื่อ-นามสกุล)</label>
-            <input type="text" id="full_name" name="full_name" class="form-control" value="<?php echo htmlspecialchars($input['full_name'] ?? ''); ?>" required>
+        <div class="mb-4">
+            <label for="full_name" class="block mb-1">Full Name (ชื่อ-นามสกุล)</label>
+            <input type="text" id="full_name" name="full_name" class="w-full px-3 py-2 border rounded" value="<?php echo htmlspecialchars($input['full_name'] ?? ''); ?>" required>
         </div>
 
-        <div class="form-group">
-            <label for="phone_number">Phone Number</label>
-            <input type="tel" id="phone_number" name="phone_number" class="form-control" value="<?php echo htmlspecialchars($input['phone_number'] ?? ''); ?>">
+        <div class="mb-4">
+            <label for="phone_number" class="block mb-1">Phone Number</label>
+            <input type="tel" id="phone_number" name="phone_number" class="w-full px-3 py-2 border rounded" value="<?php echo htmlspecialchars($input['phone_number'] ?? ''); ?>">
         </div>
 
-        <hr>
+        <hr class="my-4">
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" class="form-control" required>
+        <div class="mb-4">
+            <label for="password" class="block mb-1">Password</label>
+            <input type="password" id="password" name="password" class="w-full px-3 py-2 border rounded" required>
         </div>
 
-        <div class="form-group">
-            <label for="password_confirm">Confirm Password</label>
-            <input type="password" id="password_confirm" name="password_confirm" class="form-control" required>
+        <div class="mb-4">
+            <label for="password_confirm" class="block mb-1">Confirm Password</label>
+            <input type="password" id="password_confirm" name="password_confirm" class="w-full px-3 py-2 border rounded" required>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block">Register</button>
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">Register</button>
 
-        <p class="form-footer-text">
-            Already have an account? <a href="login.php">Login here</a>
+        <p class="text-center text-sm mt-4">
+            Already have an account? <a class="text-blue-600 hover:underline" href="login.php">Login here</a>
         </p>
     </form>
 </div>
 
 <?php
-// Add a check for the success message on the login page
-if (isset($_GET['registration']) && $_GET['registration'] === 'success') {
-    echo "<script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const formContainer = document.querySelector('.form-container');
-            const successAlert = document.createElement('div');
-            successAlert.className = 'alert alert-success';
-            successAlert.innerHTML = 'Registration successful! Your account is now awaiting admin approval.';
-            formContainer.insertBefore(successAlert, formContainer.firstChild);
-        });
-    </script>";
-}
 require_once 'templates/footer.php';
 ?>

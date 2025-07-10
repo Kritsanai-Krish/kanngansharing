@@ -33,21 +33,21 @@ $page_title = "Home";
 require_once 'templates/header.php';
 ?>
 
-<div class="container-fluid no-padding">
-    <section class="hero-section">
-        <div class="hero-content">
-            <h1>หาร AI อย่างปลอดภัยและมั่นใจ</h1>
+<div class="bg-blue-600 text-white">
+    <section class="container mx-auto py-20 text-center">
+        <div class="animate-fade space-y-4">
+            <h1 class="text-3xl font-bold">หาร AI อย่างปลอดภัยและมั่นใจ</h1>
             <p>แพลตฟอร์มกลางสำหรับหาเพื่อนหารค่าบริการ AI ที่น่าเชื่อถือ มีแอดมินคอยดูแลและระบบที่ปลอดภัย</p>
-            <a href="/groups.php" class="btn btn-primary btn-lg">
+            <a href="/groups.php" class="inline-block px-6 py-3 bg-white text-blue-600 font-semibold rounded hover:bg-gray-200">
                 <i class="fas fa-search"></i> ค้นหากลุ่มเลยตอนนี้
             </a>
         </div>
     </section>
 </div>
 
-<div class="container">
+<div class="container mx-auto px-4">
     <?php if (!empty($announcement)): ?>
-    <section class="global-announcement">
+    <section class="bg-yellow-100 border-l-4 border-yellow-500 p-4 my-6">
         <i class="fas fa-bullhorn"></i>
         <div class="announcement-content">
             <strong>ประกาศจากแอดมิน:</strong>
@@ -56,56 +56,46 @@ require_once 'templates/header.php';
     </section>
     <?php endif; ?>
 
-    <section class="how-it-works">
-        <h2>มันทำงานอย่างไร?</h2>
-        <div class="steps-grid">
-            <div class="step">
-                <div class="step-icon"><i class="fas fa-search-plus"></i></div>
-                <h3>1. ค้นหากลุ่ม</h3>
+    <section class="my-10">
+        <h2 class="text-center text-2xl font-bold mb-6">มันทำงานอย่างไร?</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="text-center p-4 bg-white rounded shadow">
+                <div class="text-blue-600 text-3xl mb-2"><i class="fas fa-search-plus"></i></div>
+                <h3 class="font-semibold">1. ค้นหากลุ่ม</h3>
                 <p>เลือกดูจากกลุ่มหาร AI ที่มีอยู่หลากหลายรายการตามที่คุณต้องการใช้งาน</p>
             </div>
-            <div class="step">
-                <div class="step-icon"><i class="fas fa-money-check-alt"></i></div>
-                <h3>2. เข้าร่วมและชำระเงิน</h3>
+            <div class="text-center p-4 bg-white rounded shadow">
+                <div class="text-blue-600 text-3xl mb-2"><i class="fas fa-money-check-alt"></i></div>
+                <h3 class="font-semibold">2. เข้าร่วมและชำระเงิน</h3>
                 <p>กดเข้าร่วมกลุ่มและชำระเงินผ่านระบบ QR Code ที่ปลอดภัย พร้อมแนบสลิปยืนยัน</p>
             </div>
-            <div class="step">
-                <div class="step-icon"><i class="fas fa-key"></i></div>
-                <h3>3. รับข้อมูลและใช้งาน</h3>
+            <div class="text-center p-4 bg-white rounded shadow">
+                <div class="text-blue-600 text-3xl mb-2"><i class="fas fa-key"></i></div>
+                <h3 class="font-semibold">3. รับข้อมูลและใช้งาน</h3>
                 <p>เมื่อหัวหน้ากลุ่มอนุมัติ คุณจะสามารถเห็นข้อมูลและเข้าใช้งาน AI ได้ทันที</p>
             </div>
         </div>
     </section>
 
     <?php if (!empty($featured_groups)): ?>
-    <section class="featured-groups">
-        <h2>กลุ่มล่าสุดที่ยังเปิดรับ</h2>
-        <div class="group-grid">
+    <section class="my-10">
+        <h2 class="text-center text-2xl font-bold mb-6">กลุ่มล่าสุดที่ยังเปิดรับ</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <?php foreach ($featured_groups as $group): ?>
-                <div class="group-card status-<?php echo htmlspecialchars($group['status']); ?>">
-                    <div class="card-header">
-                        <span class="status-badge status-<?php echo htmlspecialchars($group['status']); ?>">
+                <div class="border rounded shadow p-4 status-<?php echo htmlspecialchars($group['status']); ?>">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="px-2 py-1 text-xs rounded bg-blue-600 text-white status-badge status-<?php echo htmlspecialchars($group['status']); ?>">
                             <?php echo ucfirst(htmlspecialchars($group['status'])); ?>
                         </span>
-                        <h3><?php echo htmlspecialchars($group['ai_name']); ?></h3>
+                        <h3 class="font-semibold text-sm"><?php echo htmlspecialchars($group['ai_name']); ?></h3>
                     </div>
-                    <div class="card-body">
-                         <p class="card-creator">By: <?php echo htmlspecialchars($group['creator_username']); ?></p>
-                         <div class="card-price">
-                            ฿<?php echo number_format($group['price_per_slot'], 2); ?>
-                            <span>/ month</span>
-                        </div>
-                        <div class="card-members">
-                             <div class="member-count">
-                                <i class="fas fa-users"></i>
-                                <span><?php echo $group['member_count']; ?> / <?php echo $group['total_slots']; ?> Members</span>
-                            </div>
-                            <progress value="<?php echo $group['member_count']; ?>" max="<?php echo $group['total_slots']; ?>"></progress>
-                        </div>
+                    <p class="text-sm mb-2">By: <?php echo htmlspecialchars($group['creator_username']); ?></p>
+                    <div class="mb-2 text-lg font-bold">฿<?php echo number_format($group['price_per_slot'], 2); ?> <span class="text-sm font-normal">/ month</span></div>
+                    <div class="mb-2 text-sm flex items-center justify-between">
+                        <span><i class="fas fa-users"></i> <?php echo $group['member_count']; ?> / <?php echo $group['total_slots']; ?></span>
+                        <progress class="flex-grow ml-2" value="<?php echo $group['member_count']; ?>" max="<?php echo $group['total_slots']; ?>"></progress>
                     </div>
-                    <div class="card-footer">
-                        <a href="/group.php?id=<?php echo $group['id']; ?>" class="btn btn-secondary btn-block">View Details</a>
-                    </div>
+                    <a href="/group.php?id=<?php echo $group['id']; ?>" class="block text-center mt-2 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">View Details</a>
                 </div>
             <?php endforeach; ?>
         </div>
